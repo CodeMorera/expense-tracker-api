@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Money Clip</title>
+    <link rel = "stylesheet" href="style.css">
+</head>
+<body>
+<header>
+    <h1 id="">Money Clip</h1>
+
+</header>
+<nav>
+    <a href="#">Home</a>
+    <a href="#">About</a>
+    <a href="#">LogIn</a>
+</nav>
+<hr>
+<h3 class = "titlename">Your Expense Tracker</h3>
+<section>
+    <form action="" method="post">
+        <label for="category">Category</label>
+        <br>
+        <select name="category" id="category">
+            <option value="blank"></option>
+            <option value="dining">Dining</option>
+            <option value="donation">Donation</option>
+            <option value="education">Education</option>
+            <option value="emergencies">Emergencies</option>
+            <option value="grocery">Groceries</option>
+            <option value="hobby">Recreation</option>
+            <option value="mortgage">Mortgage</option>
+            <option value="rent">Rent</option>
+            <option value="vehicle">Vehicle</option>
+            <option value="utility">Utilities</option>
+        </select>
+        <br>
+
+        <label for="description">Description</label>
+        <br>
+        <input type="text" name="description" id="description">
+        <br>
+
+        <label for="amount">Amount</label>
+        <br>
+        <input type="number" name="amount" id="amount"  placeholder="1.0" step="0.01">
+        <br>
+
+        <button type="button" onclick="addExpense()">Add Expense</button>
+        <button type = "button" onclick="downloadCSV()" id="downloadBtn">Download CSV</button>
+
+        <br>
+        <button type="reset">Clear</button>
+    </form>
+</section>
+
+<section id="expenses-list">
+    <h2>Your Expenses</h2>
+    <table id="expensesTable">
+        <tr>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Amount</th>
+            <th>Date</th>
+        </tr>
+
+    </table>
+</section>
+
+<footer></footer>
+
+    <script src = "script.js"></script>
+
+</body>
+</html>
