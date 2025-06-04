@@ -6,54 +6,59 @@ import jakarta.persistence.Id;
 import java.time.LocalDate;
 
 @Entity
-public class Expense {
+public class Income {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
-
     private String category;
     private String description;
-    private double amount;
+    private Double amount;
     private LocalDate date;
 
-    public Expense(String category, String description, double amount, LocalDate date){
+    public Income(String category,Double amount, LocalDate date){
         this.category = category;
-        this.description = description;
         this.amount = amount;
         this.date = date;
     }
 
-    public Expense() {
+    public Income() {
 
-    }
-
-    public String getCategory() {return category;}
-    public String getDescription() {return description;}
-    public double getAmount() {return amount;}
-    public LocalDate getDate() {return date;}
-
-    public String toString(){
-        return String.format("%s | %s | %.2f |%s",
-                category,description,amount,date);
-    }
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
     public void setCategory(String category) {
         this.category = category;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public LocalDate getDate() {
+        return date;
     }
 
     public void setDate(LocalDate date) {

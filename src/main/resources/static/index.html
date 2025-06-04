@@ -1,75 +1,126 @@
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Money Clip</title>
-    <link rel = "stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header>
-    <h1 id="">Money Clip</h1>
 
+<header>
+    <h1>Money Clip</h1>
 </header>
+
 <nav>
     <a href="#">Home</a>
-    <a href="#">About</a>
-    <a href="#">LogIn</a>
+    <a href="faq.html">FAQ</a>
+    <a href="#">Login</a>
 </nav>
+
 <hr>
-<h3 class = "titlename">Your Expense Tracker</h3>
-<section>
-    <form action="" method="post">
-        <label for="category">Category</label>
-        <br>
-        <select name="category" id="category">
-            <option value="blank"></option>
-            <option value="dining">Dining</option>
-            <option value="donation">Donation</option>
-            <option value="education">Education</option>
-            <option value="emergencies">Emergencies</option>
-            <option value="grocery">Groceries</option>
-            <option value="hobby">Recreation</option>
-            <option value="mortgage">Mortgage</option>
-            <option value="rent">Rent</option>
-            <option value="vehicle">Vehicle</option>
-            <option value="utility">Utilities</option>
-        </select>
-        <br>
 
-        <label for="description">Description</label>
-        <br>
-        <input type="text" name="description" id="description">
-        <br>
+<h3 class="titlename">Your Expense Tracker</h3>
 
-        <label for="amount">Amount</label>
-        <br>
-        <input type="number" name="amount" id="amount"  placeholder="1.0" step="0.01">
-        <br>
+<section class="dashboard-grid">
+    <!-- Income Card -->
+    <div class="card">
+        <div class="form-box">
+            <h3>Income Form</h3>
+            <form>
+                <label for="income-category">Category</label><br>
+                <select id="income-category">
+                    <option value="blank"></option>
+                    <option value="wage">Wages/Salaries</option>
+                    <option value="interest">Interest</option>
+                    <option value="dividend">Dividends</option>
+                    <option value="gains">Capital Gains</option>
+                    <option value="business">Business Income</option>
+                    <option value="unemployment">Unemployment Compensation</option>
+                    <option value="socialsecurity">Social Security</option>
+                    <option value="pension">Pension/Retirement</option>
+                    <option value="other">Other</option>
+                </select><br>
 
-        <button type="button" onclick="addExpense()">Add Expense</button>
-        <button type = "button" onclick="downloadCSV()" id="downloadBtn">Download CSV</button>
+                <label for="income-description">Description</label><br>
+                <input type="text" id="income-description"><br>
 
-        <br>
-        <button type="reset">Clear</button>
-    </form>
+                <label for="income-amount">Amount</label><br>
+                <input type="number" id="income-amount" step="0.01" placeholder="1.00"><br>
+
+                <button type="button" onclick="addIncome()">Add Income</button>
+                <button type="button" onclick="downloadIncomeCSV()">Download CSV</button><br>
+                <button type="reset">Clear</button>
+            </form>
+        </div>
+        <div class="table-box">
+            <h3>Your Income</h3>
+            <table id="incomeTable">
+                <tr>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- Expense Card -->
+    <div class="card">
+        <div class="form-box">
+            <h3>Expense Form</h3>
+            <form>
+                <label for="category">Category</label><br>
+                <select id="category">
+                    <option value="blank"></option>
+                    <option value="dining">Dining</option>
+                    <option value="donation">Donation</option>
+                    <option value="education">Education</option>
+                    <option value="emergencies">Emergencies</option>
+                    <option value="grocery">Groceries</option>
+                    <option value="hobby">Recreation</option>
+                    <option value="mortgage">Mortgage</option>
+                    <option value="rent">Rent</option>
+                    <option value="vehicle">Vehicle</option>
+                    <option value="utility">Utilities</option>
+                </select><br>
+
+                <label for="description">Description</label><br>
+                <input type="text" id="description"><br>
+
+                <label for="amount">Amount</label><br>
+                <input type="number" id="amount" step="0.01" placeholder="1.00"><br>
+
+                <button type="button" onclick="addExpense()">Add Expense</button>
+                <button type="button" onclick="downloadCSV()">Download CSV</button><br>
+                <button type="reset">Clear</button>
+            </form>
+        </div>
+        <div class="table-box">
+            <h3>Your Expenses</h3>
+            <table id="expensesTable">
+                <tr>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                </tr>
+            </table>
+        </div>
+    </div>
 </section>
 
-<section id="expenses-list">
-    <h2>Your Expenses</h2>
-    <table id="expensesTable">
-        <tr>
-            <th>Category</th>
-            <th>Description</th>
-            <th>Amount</th>
-            <th>Date</th>
-        </tr>
 
-    </table>
-</section>
+<footer>
+    <p>© 2025 Money Clip. All rights reserved.</p>
+</footer>
 
-<footer></footer>
-
-    <script src = "script.js"></script>
-
+<script src="script.js"></script>
 </body>
 </html>
+
+
+

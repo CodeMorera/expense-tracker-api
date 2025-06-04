@@ -1,8 +1,8 @@
 package com.expensetracker.expense_tracker.service;
 import com.expensetracker.expense_tracker.entity.Expense;
 import com.expensetracker.expense_tracker.repository.ExpenseRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
