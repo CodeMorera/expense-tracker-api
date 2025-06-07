@@ -12,7 +12,7 @@ Money Clip is a simple web-based financial tracking app built with Java, Spring 
 
 ## 🛠️ Technologies Used
 ### Backend:
-- Java 17
+- Java 23
 - Spring Boot 3.5
 - Spring Web
 - JPA (with optional H2 or MySQL)
