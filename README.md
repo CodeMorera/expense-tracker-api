@@ -6,7 +6,7 @@ Money Clip is a simple web-based financial tracking app built with Java, Spring 
 - View them in live tables (stored in memory or in database)
 - Export income or expenses to CSV
 - Clean and responsive UI
-- Data validation (in progress)
+- Data validation
 - Backend: Spring Boot + MySQL
 - Frontend: HTML, CSS, JavaScript
 
