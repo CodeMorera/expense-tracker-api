@@ -151,6 +151,16 @@ footer {
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
+.error-message {
+    color: red;
+    font-size: 0.85em;
+    margin-top: 4px;
+}
+
+input.error,
+select.error {
+    border: 2px solid red;
+}
 
 
 h3 {

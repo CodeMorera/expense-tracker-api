@@ -1,10 +1,48 @@
 //Notes as I refresh myself in JavaScript
+function clearIncomeErrors(){
+    document.getElementById("incomeCategoryError").textContent = "";
+    document.getElementById("incomeDescriptionError").textContent = "";
+    document.getElementById("incomeAmountError").textContent = "";
+
+    document.getElementById("income-category").classList.remove("error");
+    document.getElementById("income-description").classList.remove("error");
+    document.getElementById("income-amount").classList.remove("error");
+}
+
 function addIncome(){
-    const category = document.getElementById("income-category").value;
-    const description = document.getElementById("income-description").value;
-    const amountInput = document.getElementById("income-amount").value;
+    clearIncomeErrors();
+
+    const categoryField = document.getElementById("income-category");
+    const descriptionField = document.getElementById("income-description");
+    const amountField = document.getElementById("income-amount");
+
+    const category = categoryField.value;
+    const description =descriptionField.value;
+    const amountInput =amountField.value;
     const amount = amountInput ? parseFloat(amountInput) : 0;
     const date = new Date().toISOString().slice(0,10);
+
+    let hasError = false;
+
+    if(category === "blank"){
+        document.getElementById("incomeCategoryError").textContent = "Must select a category."
+        categoryField.classList.add("error");
+        hasError = true;
+    }
+
+    if(isNaN(amount) || amount <= 0){
+        document.getElementById("incomeAmountError").textContent = "Amount must be a positive number"
+        amountField.classList.add("error");
+        hasError = true;
+    }
+
+    if(!description){
+        document.getElementById("incomeDescriptionError").textContent = "Must write a description."
+        descriptionField.classList.add("error");
+        hasError = true;
+    }
+
+    if (hasError) return;
 
     const income ={
         category,
@@ -32,6 +70,7 @@ function addIncome(){
         }).catch(error =>{
         console.log("Error adding income:", error)
     })
+
 }
 
 function downloadIncomeCSV(){
@@ -64,12 +103,51 @@ function loadIncome(){
         .catch(error => console.log(error));
 }
 
+function clearExpenseErrors(){
+    document.getElementById("expenseAmountError").innerText = "";
+    document.getElementById("expenseCategoryError").innerText = "";
+    document.getElementById("expenseDescriptionError").innerText = "";
+
+    document.getElementById("category").classList.remove("error");
+    document.getElementById("description").classList.remove("error");
+    document.getElementById("amount").classList.remove("error");
+
+}
+
 function addExpense(){
-    const category = document.getElementById("category").value;
-    const description = document.getElementById("description").value;
-    const amountInput = document.getElementById("amount").value;
+    clearExpenseErrors();
+
+    const categoryField = document.getElementById("category");
+    const descriptionField = document.getElementById("description");
+    const amountField = document.getElementById("amount")
+
+    const category = categoryField.value;
+    const description = descriptionField.value;
+    const amountInput = amountField.value
     const amount = amountInput ? parseFloat(amountInput) : 0;
     const date = new Date().toISOString().slice(0,10);
+
+    let hasError = false;
+
+    if(category === "blank"){
+        document.getElementById("expenseCategoryError").textContent = "Must select a category."
+        categoryField.classList.add("error");
+        hasError = true;
+    }
+
+    if(isNaN(amount) || amount <= 0){
+        document.getElementById("expenseAmountError").textContent = "Amount must be a positive number"
+        amountField.classList.add("error");
+        hasError = true;
+    }
+
+    if(!description){
+        document.getElementById("expenseDescriptionError").textContent = "Must write a description."
+        descriptionField.classList.add("error");
+        hasError = true;
+    }
+
+    if (hasError) return;
 
     const expense = {
         category,

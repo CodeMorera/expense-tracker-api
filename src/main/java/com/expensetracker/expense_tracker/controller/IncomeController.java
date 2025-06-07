@@ -1,9 +1,11 @@
 package com.expensetracker.expense_tracker.controller;
 
-import com.expensetracker.expense_tracker.entity.Expense;
 import com.expensetracker.expense_tracker.entity.Income;
 import com.expensetracker.expense_tracker.service.IncomeService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -24,9 +26,17 @@ public class IncomeController {
         return incomeService.getAllIncome();
     }
 
-    @PostMapping
-    public Income addIncome(@RequestBody Income income){
-        return incomeService.addIncome(income);
+  @PostMapping
+    public ResponseEntity<?> addIncome(@Valid @RequestBody Income income, BindingResult result){
+        if (result.hasErrors()){
+            List<String> errors = result.getFieldErrors()
+                    .stream()
+                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                    .toList();
+            return ResponseEntity.badRequest().body(errors);
+        }
+        Income savedIncome = incomeService.addIncome(income);
+        return ResponseEntity.ok(savedIncome);
     }
 
     @GetMapping("/export")
@@ -48,4 +58,5 @@ public class IncomeController {
         writer.flush();
         writer.close();
     }
+
 }

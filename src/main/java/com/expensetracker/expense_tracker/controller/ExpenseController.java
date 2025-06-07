@@ -1,10 +1,11 @@
 package com.expensetracker.expense_tracker.controller;
 
 import com.expensetracker.expense_tracker.entity.Expense;
-import com.expensetracker.expense_tracker.repository.ExpenseRepository;
 import com.expensetracker.expense_tracker.service.ExpenseManager;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -28,9 +29,17 @@ public class ExpenseController {
         return expenseManager.getAllExpenses();
     }
 
-    @PostMapping
-    public Expense addExpenses(@RequestBody Expense expense){
-        return expenseManager.addExpense(expense);
+  @PostMapping
+    public ResponseEntity<?> addExpense(@Valid @RequestBody Expense expense, BindingResult result){
+        if (result.hasErrors()){
+            List<String> errors = result.getFieldErrors()
+                    .stream()
+                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                    .toList();
+            return ResponseEntity.badRequest().body(errors);
+        }
+        Expense savedExpense = expenseManager.addExpense(expense);
+        return ResponseEntity.ok(savedExpense);
     }
 
     @GetMapping("/export")
@@ -52,7 +61,4 @@ public class ExpenseController {
         writer.flush();
         writer.close();
     }
-
-
-
 }

@@ -3,6 +3,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+
 import java.time.LocalDate;
 
 @Entity
@@ -10,9 +13,16 @@ public class Income {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
+    
+    @NotBlank(message = "Category is required")
     private String category;
+    
+    @NotBlank(message = "A brief description is required")
     private String description;
+    
+    @DecimalMin(value = "0.01", message = "Input must be more than zero" )
     private Double amount;
+
     private LocalDate date;
 
     public Income(String category,Double amount, LocalDate date){
