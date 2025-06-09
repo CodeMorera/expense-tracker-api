@@ -47,12 +47,13 @@
                 <label for="income-amount">Amount</label><br>
                 <input type="number" id="income-amount" step="0.01" placeholder="1.00" required><br>
 
+                <label for="income-date">Date</label><br>
+                <input type="date" name="income-date" id="income-date" max="" >
+
                 <div id ="incomeCategoryError"  class="error-message"></div>
                 <div id="incomeDescriptionError" class="error-message"></div>
                 <div id="incomeAmountError" class="error-message"></div>
-
-
-
+                <div id="incomeDateError" class="error-message"></div>
 
                 <button type="button" onclick="addIncome()">Add Income</button>
                 <button type="button" onclick="downloadIncomeCSV()">Download CSV</button><br>
@@ -69,6 +70,7 @@
                     <th>Date</th>
                 </tr>
             </table>
+            <div id="incomeSummary" class="summary-box">Total Income: $0.00</div>
         </div>
     </div>
 
@@ -99,15 +101,20 @@
                 <label for="amount">Price</label><br>
                 <input type="number" id="amount" step="0.01" placeholder="1.00" required><br>
 
+                <label for="expense-date">Date</label><br>
+                <input type="date" name="expense-date" id="expense-date" max=""><br>
+
                 <div id="expenseCategoryError" class="error-message"></div>
                 <div id="expenseDescriptionError" class="error-message"></div>
                 <div id="expenseAmountError" class="error-message"></div>
+                <div id="expenseDateError" class="error-message"></div>
 
                 <button type="button" onclick="addExpense()">Add Expense</button>
                 <button type="button" onclick="downloadCSV()">Download CSV</button><br>
                 <button type="reset">Clear</button>
             </form>
         </div>
+
         <div class="table-box">
             <h3>Your Expenses</h3>
             <table id="expensesTable">
@@ -118,10 +125,12 @@
                     <th>Date</th>
                 </tr>
             </table>
+            <div id="expenseSummary" class="summary-box">Total Expenses: $0.00</div>
         </div>
     </div>
 </section>
 
+<div id="netSummary" class="net-summary-box">Net Savings: $0.00</div>
 
 <footer>
     <p>© 2025 Money Clip. All rights reserved.</p>

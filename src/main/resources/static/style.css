@@ -134,6 +134,22 @@ footer {
     margin: 2rem auto;
 }
 
+.summary-box {
+    font-weight: bold;
+    margin: 10px 0;
+    font-size: 1em;
+    color: #2c3e50;
+}
+
+.net-summary-box{
+    font-weight: bold;
+    font-size: 1em;
+    color: #4CAF50;
+    display: flex;
+    justify-content: center;
+}
+
+
 .card {
     display: flex;
     flex-direction: column;

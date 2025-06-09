@@ -3,10 +3,12 @@ function clearIncomeErrors(){
     document.getElementById("incomeCategoryError").textContent = "";
     document.getElementById("incomeDescriptionError").textContent = "";
     document.getElementById("incomeAmountError").textContent = "";
+    document.getElementById("incomeDateError").textContent="";
 
     document.getElementById("income-category").classList.remove("error");
     document.getElementById("income-description").classList.remove("error");
     document.getElementById("income-amount").classList.remove("error");
+    document.getElementById("income-date").classList.remove("error");
 }
 
 function addIncome(){
@@ -15,12 +17,14 @@ function addIncome(){
     const categoryField = document.getElementById("income-category");
     const descriptionField = document.getElementById("income-description");
     const amountField = document.getElementById("income-amount");
+    const dateField = document.getElementById("income-date");
 
     const category = categoryField.value;
     const description =descriptionField.value;
     const amountInput =amountField.value;
     const amount = amountInput ? parseFloat(amountInput) : 0;
-    const date = new Date().toISOString().slice(0,10);
+    const dateValue = dateField.value || new Date().toISOString().slice(0,10);
+    const today = new Date().toISOString().slice(0,10);
 
     let hasError = false;
 
@@ -42,13 +46,19 @@ function addIncome(){
         hasError = true;
     }
 
+    if(!dateValue || dateValue > today){
+        document.getElementById("incomeDateError").textContent = "Must select a date"
+        dateField.classList.add("error");
+        hasError = true;
+    }
+
     if (hasError) return;
 
     const income ={
         category,
         description,
         amount,
-        date
+        date: dateValue
     };
     fetch('/api/income',{
         method: 'POST',
@@ -89,7 +99,9 @@ function loadIncome(){
                 <th>Amount</th>
                 <th>Date</th>
             </tr>`;
+            let total = 0;
             data.forEach(income =>{
+                total += income.amount
                 const row = `
                   <tr>
                     <td>${income.category}</td>
@@ -99,6 +111,9 @@ function loadIncome(){
                   </tr>`;
                 table.innerHTML += row;
             });
+            document.getElementById("incomeSummary")
+                .textContent = `Total Income: $${total.toFixed(2)}`;
+            updateNetSavings();
         })
         .catch(error => console.log(error));
 }
@@ -107,10 +122,12 @@ function clearExpenseErrors(){
     document.getElementById("expenseAmountError").innerText = "";
     document.getElementById("expenseCategoryError").innerText = "";
     document.getElementById("expenseDescriptionError").innerText = "";
+    document.getElementById("expenseDateError").innerText = "";
 
     document.getElementById("category").classList.remove("error");
     document.getElementById("description").classList.remove("error");
     document.getElementById("amount").classList.remove("error");
+    document.getElementById("expense-date").classList.remove("error");
 
 }
 
@@ -119,13 +136,15 @@ function addExpense(){
 
     const categoryField = document.getElementById("category");
     const descriptionField = document.getElementById("description");
-    const amountField = document.getElementById("amount")
+    const amountField = document.getElementById("amount");
+    const dateField = document.getElementById("expense-date");
 
     const category = categoryField.value;
     const description = descriptionField.value;
     const amountInput = amountField.value
     const amount = amountInput ? parseFloat(amountInput) : 0;
-    const date = new Date().toISOString().slice(0,10);
+    const dateValue = dateField.value || new Date().toISOString().slice(0,10);
+    const today = new Date().toISOString().slice(0,10);
 
     let hasError = false;
 
@@ -147,13 +166,19 @@ function addExpense(){
         hasError = true;
     }
 
+    if(!dateValue || dateValue > today){
+        document.getElementById("expenseDateError").textContent = "Must select a date"
+        dateField.classList.add("error");
+        hasError = true;
+    }
+
     if (hasError) return;
 
     const expense = {
         category,
         description,
         amount,
-        date
+        date: dateValue
     };
     fetch('/api/expenses', {
         method: 'POST',
@@ -197,8 +222,9 @@ function loadExpenses(){
                 </tr>
             `;
             table.innerHTML += headerRow
-
+            let total = 0
             data.forEach(expense =>{//looping through data array to fill table
+                total += expense.amount;
                 const row =`
                     <tr>
                         <td>${expense.category}</td>
@@ -208,12 +234,30 @@ function loadExpenses(){
                     
                     </tr>`;
                 table.innerHTML += row;
-            })
+            });
+            document.getElementById("expenseSummary")
+                .textContent = `Total Expenses: $${total.toFixed(2)}`;
+            updateNetSavings();
         })
         .catch(error => console.error(error));
 }
 
+function updateNetSavings(){
+    const incomeText = document.getElementById("incomeSummary").textContent;
+    const expenseText = document.getElementById("expenseSummary").textContent;
+
+    const income = parseFloat(incomeText.replace(/[^\d.]/g,""));
+    const expense = parseFloat(expenseText.replace(/[^\d.]/g,""));
+
+    const net = income - expense;
+    document.getElementById("netSummary").textContent = `Net Savings: $${net.toFixed(2)}`;
+
+}
+
 window.onload = function () {
+    const today = new Date().toISOString().split("T")[0];
+    document.getElementById("expense-date").max = today;
+    document.getElementById("income-date").max = today;
     loadExpenses();
     loadIncome()
 }

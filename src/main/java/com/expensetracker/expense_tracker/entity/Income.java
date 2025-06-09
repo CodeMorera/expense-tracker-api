@@ -5,6 +5,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PastOrPresent;
 
 import java.time.LocalDate;
 
@@ -23,10 +24,13 @@ public class Income {
     @DecimalMin(value = "0.01", message = "Input must be more than zero" )
     private Double amount;
 
+    @PastOrPresent(message = "Date cannot be in the future")
     private LocalDate date;
 
-    public Income(String category,Double amount, LocalDate date){
+
+    public Income(String category,String description,Double amount, LocalDate date){
         this.category = category;
+        this.description = description;
         this.amount = amount;
         this.date = date;
     }
