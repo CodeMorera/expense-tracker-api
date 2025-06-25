@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reports</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+    <h1>Money Clip</h1>
+</header>
+
+<nav>
+    <a href="index.html">Home</a>
+    <a href="faq.html">FAQ</a>
+    <a href="#">Login</a>
+    <a href="reports.html">Reports</a>
+</nav>
+
+<hr>
+    <h2 class="titlename">Download & Print Financial Reports</h2>
+
+<div class="net-filter-container">
+    <label for="report-period">Choose Period:</label>
+    <select id="report-period" onchange="generateReport()">
+        <option value="all">All Time</option>
+        <option value="this-month">This Month</option>
+        <option value="last-month">Last Month</option>
+        <option value="year-to-date">Year to Date</option>
+        <option value="last-year">Last Year</option>
+    </select>
+</div>
+
+<section class="dashboard-grid">
+    <div class="card">
+        <div class="form-box">
+            <div id="report-content">
+                <div class="chart-toggle" style="margin-top: 20px; text-align: center;">
+                    <button onclick="showCharts()" style="margin-right: 10px;">📊 Show Charts</button>
+                    <button onclick="hideCharts()">🚫 Hide Charts</button>
+                </div>
+
+                <div id="charts-container" style="display: none; max-width: 800px; margin: auto;">
+                    <canvas id="incomeChart" width="400" height="200"></canvas>
+                    <canvas id="expenseChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+    <button class= "report-btn" onclick="window.print()">Print Report</button>
+    <button class= "report-btn" onclick="downloadCombineCSV()">Export CSV</button>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

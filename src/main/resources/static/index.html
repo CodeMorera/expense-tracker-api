@@ -12,14 +12,29 @@
 </header>
 
 <nav>
-    <a href="#">Home</a>
+    <a href="index.html">Home</a>
     <a href="faq.html">FAQ</a>
     <a href="#">Login</a>
+    <a href="reports.html">Reports</a>
 </nav>
 
 <hr>
 
 <h3 class="titlename">Your Expense Tracker</h3>
+<div class="net-summary-container">
+    <div id="netSummary" class="net-summary-box">Net Savings: $0.00</div>
+    <div id="netTimestamp" class="net-update-time">Last updated: never</div>
+</div>
+<div class="net-filter-container">
+    <label for="netFilter">Show Net Income for:</label>
+    <select id="netFilter" onchange="updateNetSavings()">
+        <option value="all">All Time</option>
+        <option value="this-month">This Month</option>
+        <option value="last-month">Last Month</option>
+    </select>
+</div>
+
+
 
 <section class="dashboard-grid">
     <!-- Income Card -->
@@ -130,12 +145,10 @@
     </div>
 </section>
 
-<div id="netSummary" class="net-summary-box">Net Savings: $0.00</div>
-
 <footer>
     <p>© 2025 Money Clip. All rights reserved.</p>
 </footer>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
