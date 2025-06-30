@@ -78,7 +78,7 @@ function addIncome(){
         })
         .then(data => {
         console.log("Income data added:", data);
-        loadIncome().then(updateNetSavings); // ✅
+        loadIncome().then(refreshSummary);
     })
         .catch(error =>{
         console.log("Error adding income:", error)
@@ -94,34 +94,33 @@ function loadIncome(){
     return fetch('/api/income')
         .then(response => response.json())
         .then(data => {
-            const table = document.getElementById('incomeTable');
-            if (!table) return;
+            console.log("Income data loaded:",data);
+            const table = document.getElementById('incomeTable').getElementsByTagName("tbody")[0];
+            if (!table) return data;
+
             totalIncome = 0;
-            table.innerHTML =`
-            <tr>
-                <th>Category</th>
-                <th>Description</th>
-                <th>Amount</th>
-                <th>Date</th>
-            </tr>`;
+            table.innerHTML = "";
 
             data.forEach(income =>{
                 totalIncome += income.amount
-                table.innerHTML += `
-                  <tr>
-                    <td>${income.category}</td>
-                    <td>${income.description}</td>
-                    <td>${income.amount}</td>
-                    <td>${income.date}</td>
-                  </tr>`;
+                const row = table.insertRow();
+                row.insertCell().textContent = income.category;
+                row.insertCell().textContent = income.description;
+                row.insertCell().textContent = `$${income.amount}`;
+                row.insertCell().textContent = income.date;
             });
+
             const summary = document.getElementById("incomeSummary");
             if (summary) {
                 summary.textContent = `Total Income: $${totalIncome.toFixed(2)}`;
             }
-            return;
+            return data;
+            // return Promise.resolve();
         })
-        .catch(error => console.log(error));
+        .catch(error =>{
+            console.log("Failed to load income", error);
+            return [];
+        });
 }
 
 function clearExpenseErrors(){
@@ -201,7 +200,7 @@ function addExpense(){
     })
     .then(data => {
         console.log("Expense added:", data);
-        loadExpenses().then(updateNetSavings);
+        loadExpenses().then(refreshSummary);
     })
         .catch(error =>{
             console.log("Error adding expense:", error)
@@ -218,38 +217,36 @@ function loadExpenses(){
         .then(data =>{ //when json is ready, holds the array of objects
             console.log(data);
             // ToDO: render to the table later
-            const table = document.getElementById('expensesTable');
-            if (!table) return;
+            const table = document.getElementById('expensesTable').getElementsByTagName("tbody")[0];
+            if (!table) return data;
 
             totalExpense = 0;
-            table.innerHTML = `
-                <tr>
-                    <th>Category</th>
-                    <th>Description</th>
-                    <th>Amount</th>
-                    <th>Date</th>
-                </tr>
-            `;
+            table.innerHTML = "";
+
             data.forEach(expense =>{//looping through data array to fill table
                 totalExpense += expense.amount;
-                table.innerHTML +=`
-                    <tr>
-                        <td>${expense.category}</td>
-                        <td>${expense.description}</td>
-                        <td>${expense.amount}</td>
-                        <td>${expense.date}</td>
-                    </tr>`;
+                const row = table.insertRow();
+                row.insertCell().textContent = expense.category;
+                row.insertCell().textContent = expense.description;
+                row.insertCell().textContent = `$${expense.amount}`;
+                row.insertCell().textContent = expense.date;
             });
+
             const summary = document.getElementById("expenseSummary");
             if (summary) {
                 summary.textContent = `Total Expense: $${totalExpense.toFixed(2)}`;
             }
-            return;
+            return data;
+            // return Promise.resolve();
         })
-        .catch(error => console.log(error));
+        .catch(error => {
+            console.log("Failed to load expenses:", error);
+            return [];
+        });
 }
 function updateNetSavings(){
     console.log("Updating net savings...");
+
     const summaryEl = document.getElementById("netSummary");
     const timeEl = document.getElementById("netTimestamp");
 
@@ -271,16 +268,16 @@ function updateNetSavings(){
 
         if (filterValue === "this-month") {
             if (date.getMonth() === thisMonth && date.getFullYear() === thisYear) {
-                filteredIncome += parseFloat(row.cells[2].textContent);
+                filteredIncome += parseFloat(row.cells[2].textContent.replace('$','').trim());
             }
         } else if (filterValue === "last-month") {
             const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
             if (date.getMonth() === lastMonth.getMonth() && date.getFullYear() === lastMonth.getFullYear()) {
-                filteredIncome += parseFloat(row.cells[2].textContent);
+                filteredIncome += parseFloat(row.cells[2].textContent.replace('$','').trim());
             }
         } else {
             // default to all-time
-            filteredIncome += parseFloat(row.cells[2].textContent);
+            filteredIncome += parseFloat(row.cells[2].textContent.replace('$','').trim());
         }
     });
     let filteredExpense = 0;
@@ -289,26 +286,27 @@ function updateNetSavings(){
 
         if (filterValue === "this-month") {
             if (date.getMonth() === thisMonth && date.getFullYear() === thisYear) {
-                filteredExpense += parseFloat(row.cells[2].textContent);
+                filteredExpense += parseFloat(row.cells[2].textContent.replace('$','').trim());
             }
         } else if (filterValue === "last-month") {
             const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
             if (date.getMonth() === lastMonth.getMonth() && date.getFullYear() === lastMonth.getFullYear()) {
-                filteredExpense += parseFloat(row.cells[2].textContent);
+                filteredExpense += parseFloat(row.cells[2].textContent.replace('$','').trim());
             }
         } else {
-            // default to all-time
-            filteredExpense += parseFloat(row.cells[2].textContent);
+            filteredExpense += parseFloat(row.cells[2].textContent.replace('$','').trim());
         }
     });
 
 
     const net = filteredIncome - filteredExpense;
-    document.getElementById("netSummary").textContent = `Net Savings: $${net.toFixed(2)}`;
+    summaryEl.textContent = `Net Savings: $${net.toFixed(2)}`;
 
     const formattedTime = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    document.getElementById("netTimestamp").textContent = `Last updated: ${formattedTime}`;
+    timeEl.textContent = `Last updated: ${formattedTime}`;
 
+    console.log("Income rows found:", incomeRows.length);
+    console.log("Expense rows found:", expenseRows.length);
 }
 
 function generateReport(){
@@ -322,8 +320,20 @@ function generateReport(){
         const filteredIncomes = filteredByDateRange(incomes, period);
         const filteredExpenses = filteredByDateRange(expenses,period);
 
-        renderIncomeChart(filteredIncomes);
-        renderExpenseChart(filteredExpenses);
+        if (document.getElementById("incomeChart")) {
+            renderIncomeChart(filteredIncomes);
+        } else {
+            console.warn("incomeChart canvas not found.");
+        }
+
+        if (document.getElementById("expenseChart")) {
+            renderExpenseChart(filteredExpenses);
+        } else {
+            console.warn("expenseChart canvas not found.");
+        }
+
+        // renderIncomeChart(filteredIncomes);
+        // renderExpenseChart(filteredExpenses);
 
         const incomeTotal = sumAmounts(filteredIncomes);
         const expenseTotal = sumAmounts(filteredExpenses);
@@ -344,8 +354,6 @@ function generateReport(){
         document.getElementById("report-content").innerHTML = reportHtml;
     })
     .catch(error => console.error("Error generating report:", error));
-
-
 }
 
 function formatReportLabel(value){
@@ -458,12 +466,18 @@ window.onload = function () {
     const onHome = document.getElementById("incomeTable") && document.getElementById("expensesTable");
     if (onHome) {
         Promise.all([loadExpenses(), loadIncome()])
-            .then(() => {
-                setTimeout(updateNetSavings,50);
+            .then(()=>{
+                console.log(" Both income and expenses loaded. Refreshing summary...")
+                updateNetSavings();
             });
+
         const netFilter = document.getElementById("netFilter");
         if (netFilter) {
-            netFilter.addEventListener("change", updateNetSavings);
+            netFilter.addEventListener("change", () => {
+                console.log("Dropdown changed!");
+                refreshSummary();
+            });
+
         }
     }
 
@@ -477,22 +491,25 @@ window.onload = function () {
 
 
 function renderExpenseChart(expenses){
+    const canvas =document.getElementById('expenseChart');
+    if (!canvas){
+        console.error("expenseChart canvas not found");
+        return;
+    }
+
     const categoryTotals = {};
-    expenses.forEach(items =>{
-        if(categoryTotals[items.category]){
-            categoryTotals[items.category] += items.amount;
-        }
-        else{
-            categoryTotals[items.category] = items.amount;
-        }
+    expenses.forEach(item =>{
+        categoryTotals[item.category] = (categoryTotals[item.category] || 0) + item.amount;
     });
+
     const labels = Object.keys(categoryTotals);
     const data = Object.values(categoryTotals);
 
     if(window.expenseChartInstance){
         window.expenseChartInstance.destroy();
     }
-    const ctx = document.getElementById('expenseChart').getContext('2d');
+
+    const ctx = canvas.getContext('2d');
     window.expenseChartInstance = new Chart(ctx,{
         type: 'bar',
         data:{
@@ -530,15 +547,17 @@ function renderExpenseChart(expenses){
 }
 
 function renderIncomeChart(incomes){
-    //Group income by category
+    const canvas = document.getElementById('incomeChart');
+    if(!canvas){
+        console.error("incomeChart canvas not found");
+        return;
+    }
+
     const categoryTotals = {};
     incomes.forEach(item =>{
-        if(categoryTotals[item.category]){
-            categoryTotals[item.category] += item.amount;
-        }else{
-            categoryTotals[item.category] = item.amount;
-        }
+        categoryTotals[item.category] = (categoryTotals[item.category] || 0) + item.amount;
     });
+
     // Prepare data for chart
     const labels = Object.keys(categoryTotals);
     const data = Object.values(categoryTotals);
@@ -547,7 +566,7 @@ function renderIncomeChart(incomes){
     if (window.incomeChartInstance){
         window.incomeChartInstance.destroy();
     }
-    const ctx = document.getElementById('incomeChart').getContext('2d');
+    const ctx = canvas.getContext('2d');
     window.incomeChartInstance = new Chart(ctx,{
         type: 'bar',
         data:{
@@ -585,10 +604,22 @@ function renderIncomeChart(incomes){
     })
 }
 
-function showChart(){
+function refreshSummary(){
+    console.log("Calling refreshSummary...");
+    Promise.all([loadExpenses(), loadIncome()])
+        .then(() => {
+            console.log("Data reloaded. Now updating net savings...");
+            updateNetSavings();
+        })
+        .catch(error => {
+            console.error("Failed to refresh data before summary:", error);
+        });
+}
+
+function showCharts(){
     document.getElementById("charts-container").style.display = "block";
 }
 
-function hideChart(){
+function hideCharts(){
     document.getElementById("charts-container").style.display = "none";
 }

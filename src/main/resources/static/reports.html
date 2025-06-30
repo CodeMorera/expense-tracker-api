@@ -18,11 +18,11 @@
 </nav>
 
 <hr>
-    <h2 class="titlename">Download & Print Financial Reports</h2>
+<h2 class="titlename">Download & Print Financial Reports</h2>
 
 <div class="net-filter-container">
     <label for="report-period">Choose Period:</label>
-    <select id="report-period" onchange="generateReport()">
+    <select id="report-period">
         <option value="all">All Time</option>
         <option value="this-month">This Month</option>
         <option value="last-month">Last Month</option>
@@ -35,6 +35,7 @@
     <div class="card">
         <div class="form-box">
             <div id="report-content">
+                <!-- Report content and charts will be injected here -->
                 <div class="chart-toggle" style="margin-top: 20px; text-align: center;">
                     <button onclick="showCharts()" style="margin-right: 10px;">📊 Show Charts</button>
                     <button onclick="hideCharts()">🚫 Hide Charts</button>
@@ -49,10 +50,13 @@
     </div>
 </section>
 
+<div style="text-align: center; margin: 20px;">
+    <button class="report-btn" onclick="window.print()">🖨️ Print Report</button>
+    <button class="report-btn" onclick="downloadCombineCSV()">📥 Export CSV</button>
+</div>
 
-    <button class= "report-btn" onclick="window.print()">Print Report</button>
-    <button class= "report-btn" onclick="downloadCombineCSV()">Export CSV</button>
+<!-- Load scripts at the end with defer -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="script.js"></script>
+<script src="script.js" defer></script>
 </body>
 </html>
